@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>mini-vue</title>
+</head>
+
+<body>
+  <div id="app">
+    <span v-text="message"></span>
+    <span v-text="username"></span>
+    <br>
+    {{message}}
+    <br>
+    <input type="text" v-model="message">
+  </div>
+  <script src="./js/watcher.js"></script>
+  <script src="./js/observer.js"></script>
+  <script src="./js/TemplateCompiler.js"></script>
+  <script src="./js/vue.js"></script>
+  <script>
+    // 1.元素节点 2.属性节点 3.文本节点
+    const vm = new Vue({
+      // 挂载视图
+      el: '#app',
+      // 定义数据
+      data: {
+        message: 'hello vue',
+        username: 'mcc'
+      }
+    });
+    class a {
+      hh() {
+        setTimeout(function () {
+          // console.log(this)
+        })
+        // console.log(this)
+      }
+    }
+    new a().hh()
+  </script>
+  <script>
+    var obj = {
+      a: 1,
+      b: 2,
+      c: {
+        d: 4,
+        f: 5,
+        e: { z: 1 }
+      }
+    }
+
+    // Object.keys(obj).forEach(key => {
+    //   defineReactive(obj, key, obj[key])
+    // });
+
+    // function defineReactive(obj, key, value) {
+    //   if (typeof value === "object") {
+    //     Object.keys(value).forEach(key => {
+    //       defineReactive(value, key, value[key])
+    //     });
+    //   } else {
+    //     Object.defineProperty(obj, key, {
+    //       get() {
+    //         console.log(`${key}被get了`)
+    //         return value
+    //       },
+    //       set(newVal) {
+    //         if (newVal !== value) {
+    //           console.log(`${key}被set了`)
+    //           value = newVal;
+    //         }
+    //       }
+    //     })
+    //   }
+    // }
+    const baseHandler = {
+      get(target, key) {
+        const res = target[key]
+        if (typeof res === "object") {
+          return reactive(res)
+        }
+        console.log(`${key}被get了`)
+        return res;
+      }, set(target, key, val) {
+        const info = { oldValue: target[key], newValue: val }
+        console.log(`${key}被set了`)
+        target[key] = val
+      }
+    }
+
+    function reactive(target) {
+      return new Proxy(target, baseHandler)
+    }
+
+    var obj_proxy = reactive(obj)
+  </script>
+</body>
+
+</html>
